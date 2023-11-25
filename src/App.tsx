@@ -1,43 +1,25 @@
-import { Location } from './types/Location';
 import React, { useState } from 'react';
-import axios from 'axios';
+import useFetchLocations from './hooks/useFetchLocations';
 
-async function fetchPinballLocationsWithinDistance(
-  latitude: number,
-  longitude: number,
-  distance: number
-): Promise<Location[]> {
-  try {
-    const params = {
-      lat: latitude,
-      lon: longitude,
-      send_all_within_distance: distance,
-      max_distance: distance,
-    };
-    const response = await axios.get(
-      `https://pinballmap.com/api/v1/locations/closest_by_lat_lon`,
-      { params }
-    );
-    return response.data.locations;
-  } catch (error) {
-    console.error('Error fetching pinball locations:', error);
-    return [];
-  }
-}
+
+
 const App: React.FC = () => {
-  const [locations, setLocations] = useState<Location[]>([]);
   const [radius, setRadius] = useState<number>(10);
-  const handleNearMeClick = async () => {
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
+
+  const { locations, loading, error } = useFetchLocations(
+    latitude,
+    longitude,
+    radius
+  );
+
+  const handleNearMeClick = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const validRadius = Math.min(radius, 50);
-          const fetchedLocations = await fetchPinballLocationsWithinDistance(
-            position.coords.latitude,
-            position.coords.longitude,
-            validRadius
-          );
-          setLocations(fetchedLocations);
+        (position) => {
+          setLatitude(position.coords.latitude);
+          setLongitude(position.coords.longitude);
         },
         (error) => {
           console.error('Geolocation error:', error);
@@ -81,6 +63,8 @@ const App: React.FC = () => {
       ) : (
         <p>No locations found within this radius.</p>
       )}
+      {loading && (<p>Loading locations...</p>)}
+      {error && (<p>Error: {error}</p>)}
     </div>
   );
 };
