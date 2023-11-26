@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import useFetchLocations from './hooks/useFetchLocations';
 import LocationsList from './components/LocationList';
 import LoadingErrorDisplay from './components/LoadingErrorDisplay';
+import SliderControl from './components/SliderControl';
 const App: React.FC = () => {
   const [radius, setRadius] = useState<number>(10);
   const [openLocationId, setOpenLocationId] = useState<number | null>(null);
@@ -33,14 +34,11 @@ const App: React.FC = () => {
   };
   return (
     <div>
-      <input
-        type="number"
-        value={radius}
-        onChange={(e) => setRadius(Number(e.target.value))}
-        placeholder="Enter radius in miles (max 50)"
-        max={50}
+      <SliderControl
+        radius={radius}
+        onRadiusChange={setRadius}
+        onNearMeClick={handleNearMeClick}
       />
-      <button onClick={handleNearMeClick}>Near Me</button>
 
       <LoadingErrorDisplay loading={loading} error={error} />
 
