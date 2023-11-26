@@ -1,27 +1,45 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Location } from '../types/Location';
+import useFetchMachineDetails from '../hooks/useFetchMachineDetails';
 import {
   ListItem,
   ListItemText,
   Collapse,
-  ListItemIcon,
-  IconButton,
   List,
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  IconButton,
+  ListItemIcon,
+  CircularProgress,
+  Typography,
 } from '@mui/material';
-import MapIcon from '@mui/icons-material/Map';
-import { Location } from '../types/Location';
+import DirectionsIcon from '@mui/icons-material/Directions';
+import LaunchIcon from '@mui/icons-material/Launch';
 
-type LocationItemProps = {
+interface LocationItemProps {
   location: Location;
   isOpen: boolean;
   onToggle: () => void;
-};
+}
 
 const LocationItem: React.FC<LocationItemProps> = ({
   location,
   isOpen,
   onToggle,
 }) => {
-  const createGoogleMapsLink = (location: Location) => {
+  const { machineDetails, loading, error, fetchMachineDetails } =
+    useFetchMachineDetails();
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchMachineDetails(location.id);
+    }
+  }, [isOpen, location.id, fetchMachineDetails]);
+
+  const createGoogleMapsLink = (location: Location): string => {
     const query = `${location.street}, ${location.city}, ${location.state}, ${location.zip}`;
     return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
       query
@@ -42,19 +60,44 @@ const LocationItem: React.FC<LocationItemProps> = ({
             href={createGoogleMapsLink(location)}
             target="_blank"
           >
-            <MapIcon />
+            <DirectionsIcon color="primary" />
           </IconButton>
         </ListItemIcon>
       </ListItem>
       <Collapse in={isOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {location.machine_names.map((machine, idx) => (
-            <ListItem key={idx} button style={{ paddingLeft: '30px' }}>
-              <ListItemText primary={machine} />
+          {loading ? (
+            <ListItem>
+              <CircularProgress />
             </ListItem>
-          ))}
+          ) : error ? (
+            <ListItem>
+              <Typography color="error">{error}</Typography>
+            </ListItem>
+          ) : (
+            <Table>
+              <TableBody>
+                {machineDetails.map((machine) => (
+                  <TableRow key={machine.id}>
+                    <TableCell>
+                      {machine.name}
+                      <IconButton
+                        edge="end"
+                        aria-label="google-maps"
+                        href={machine.ipdb_link}
+                        target="_blank"
+                      >
+                        <LaunchIcon color="primary" />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </List>
       </Collapse>
+      <Divider />
     </>
   );
 };

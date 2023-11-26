@@ -3,6 +3,7 @@ import useFetchLocations from './hooks/useFetchLocations';
 import LocationsList from './components/LocationList';
 import LoadingErrorDisplay from './components/LoadingErrorDisplay';
 import SliderControl from './components/SliderControl';
+import { Container } from '@mui/material';
 const App: React.FC = () => {
   const [radius, setRadius] = useState<number>(10);
   const [openLocationId, setOpenLocationId] = useState<number | null>(null);
@@ -33,7 +34,7 @@ const App: React.FC = () => {
     }
   };
   return (
-    <div>
+    <Container>
       <SliderControl
         radius={radius}
         onRadiusChange={setRadius}
@@ -48,7 +49,7 @@ const App: React.FC = () => {
         onListItemClick={setOpenLocationId}
         hasSearched={hasSearched}
       />
-    </div>
+    </Container>
   );
 };
 
