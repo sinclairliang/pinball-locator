@@ -7,6 +7,7 @@ const App: React.FC = () => {
   const [openLocationId, setOpenLocationId] = useState<number | null>(null);
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
+  const [hasSearched, setHasSearched] = useState<boolean>(false);
 
   const { locations, loading, error } = useFetchLocations(
     latitude,
@@ -20,6 +21,7 @@ const App: React.FC = () => {
         (position) => {
           setLatitude(position.coords.latitude);
           setLongitude(position.coords.longitude);
+          setHasSearched(true);
         },
         (error) => {
           console.error('Geolocation error:', error);
@@ -46,6 +48,7 @@ const App: React.FC = () => {
         locations={locations}
         openLocationId={openLocationId}
         onListItemClick={setOpenLocationId}
+        hasSearched={hasSearched}
       />
     </div>
   );

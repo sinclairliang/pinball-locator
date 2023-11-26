@@ -7,6 +7,7 @@ type LocationsListProps = {
   locations: Location[];
   openLocationId: number | null;
   onListItemClick: (id: number) => void;
+  hasSearched: boolean;
 };
 
 const LocationsList: React.FC<LocationsListProps> = ({ locations, openLocationId, onListItemClick }) => {
@@ -22,9 +23,9 @@ const LocationsList: React.FC<LocationsListProps> = ({ locations, openLocationId
             />
           </Paper>
         ))
-      ) : (
+      ) : hasSearched ? (
         <Typography>No locations found within this radius.</Typography>
-      )}
+      ) : null}
     </List>
   );
 };
