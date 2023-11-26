@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import useFetchLocations from './hooks/useFetchLocations';
 import LocationsList from './components/LocationList';
-
+import LoadingErrorDisplay from './components/LoadingErrorDisplay';
 const App: React.FC = () => {
   const [radius, setRadius] = useState<number>(10);
   const [openLocationId, setOpenLocationId] = useState<number | null>(null);
@@ -40,17 +40,13 @@ const App: React.FC = () => {
       />
       <button onClick={handleNearMeClick}>Near Me</button>
 
-      {locations ? (
-        <LocationsList
-          locations={locations}
-          openLocationId={openLocationId}
-          onListItemClick={setOpenLocationId}
-        />
-      ) : (
-        <p>No locations found within this radius.</p>
-      )}
-      {loading && <p>Loading locations...</p>}
-      {error && <p>Error: {error}</p>}
+      <LoadingErrorDisplay loading={loading} error={error} />
+
+      <LocationsList
+        locations={locations}
+        openLocationId={openLocationId}
+        onListItemClick={setOpenLocationId}
+      />
     </div>
   );
 };
