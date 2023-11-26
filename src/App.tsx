@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import useFetchLocations from './hooks/useFetchLocations';
-
-
+import LocationsList from './components/LocationList';
 
 const App: React.FC = () => {
   const [radius, setRadius] = useState<number>(10);
+  const [openLocationId, setOpenLocationId] = useState<number | null>(null);
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
 
@@ -41,30 +41,16 @@ const App: React.FC = () => {
       <button onClick={handleNearMeClick}>Near Me</button>
 
       {locations ? (
-        locations.map((location, index) => (
-          <div key={index}>
-            <h2>{location.name}</h2>
-            <p>
-              {location.street}, {location.city}, {location.state}{' '}
-              {location.zip}
-            </p>
-            <h3>Available Machines:</h3>
-            {location.machine_names && location.machine_names.length > 0 ? (
-              <ul>
-                {location.machine_names.map((machine, idx) => (
-                  <li key={idx}>{machine}</li>
-                ))}
-              </ul>
-            ) : (
-              <p>No machines nearby.</p>
-            )}
-          </div>
-        ))
+        <LocationsList
+          locations={locations}
+          openLocationId={openLocationId}
+          onListItemClick={setOpenLocationId}
+        />
       ) : (
         <p>No locations found within this radius.</p>
       )}
-      {loading && (<p>Loading locations...</p>)}
-      {error && (<p>Error: {error}</p>)}
+      {loading && <p>Loading locations...</p>}
+      {error && <p>Error: {error}</p>}
     </div>
   );
 };
