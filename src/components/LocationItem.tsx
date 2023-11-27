@@ -83,7 +83,7 @@ const LocationItem: React.FC<LocationItemProps> = ({
                       {machine.name}
                       <IconButton
                         edge="end"
-                        aria-label="google-maps"
+                        aria-label="ipdb-link"
                         href={machine.ipdb_link}
                         target="_blank"
                       >
