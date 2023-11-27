@@ -17,6 +17,12 @@ const App: React.FC = () => {
     radius
   );
 
+  const handleCoordinatesChange = (lat: number, lng: number) => {
+    setLatitude(lat);
+    setLongitude(lng);
+    setHasSearched(true);
+  };
+
   const handleNearMeClick = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -39,6 +45,9 @@ const App: React.FC = () => {
         radius={radius}
         onRadiusChange={setRadius}
         onNearMeClick={handleNearMeClick}
+        latitude={latitude}
+        longitude={longitude}
+        onCoordinatesChange={handleCoordinatesChange}
       />
 
       <LoadingErrorDisplay loading={loading} error={error} />
