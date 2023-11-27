@@ -25,7 +25,7 @@ const LoadingErrorDisplay: React.FC<LoadingErrorDisplayProps> = ({
   }
 
   if (error) {
-    return <Typography>Error: {error}</Typography>;
+    return <Typography>{error}</Typography>;
   }
 
   return null;

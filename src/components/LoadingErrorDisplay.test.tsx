@@ -13,7 +13,7 @@ describe('LoadingErrorDisplay', () => {
   test('displays error message when there is an error', () => {
     const errorMessage = 'Failed to fetch locations';
     render(<LoadingErrorDisplay loading={false} error={errorMessage} />);
-    expect(screen.getByText(`Error: ${errorMessage}`)).toBeInTheDocument();
+    expect(screen.getByText(`${errorMessage}`)).toBeInTheDocument();
   });
 
   test('renders nothing when not loading and no error', () => {

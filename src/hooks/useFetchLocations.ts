@@ -15,6 +15,7 @@ const useFetchLocations = (
     const fetchLocations = async () => {
       try {
         setLoading(true);
+        setError(null);
         const params = {
           lat: latitude,
           lon: longitude,
@@ -41,7 +42,7 @@ const useFetchLocations = (
         setLocations(fetchedLocations);
         setLoading(false);
       } catch (err) {
-        setError('Error fetching pinball locations');
+        setError('Try another location?');
         setLoading(false);
       }
     };
