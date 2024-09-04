@@ -11,14 +11,14 @@ type SliderControlProps = {
   onCoordinatesChange: (lat: number, lng: number) => void;
 };
 
-const SliderControl: React.FC<SliderControlProps> = ({
+const SliderControl= ({
   radius,
   onRadiusChange,
   onNearMeClick,
   latitude,
   longitude,
   onCoordinatesChange,
-}) => {
+}: SliderControlProps) => {
   const handleLatitudeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newLat = event.target.value;
     onCoordinatesChange(newLat ? parseFloat(newLat) : 0, longitude ?? 0);

@@ -10,12 +10,12 @@ type LocationsListProps = {
   hasSearched: boolean;
 };
 
-const LocationsList: React.FC<LocationsListProps> = ({
+const LocationsList = ({
   locations,
   openLocationId,
   onListItemClick,
   hasSearched,
-}) => {
+}: LocationsListProps) => {
   return (
     <List component="nav">
       {locations.length > 0 ? (
